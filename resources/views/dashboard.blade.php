@@ -3,85 +3,48 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard de Ventas</title>
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
-    <style>
-        body {
-            font-family: 'Montserrat', sans-serif;
-            background-color: #f4f4f9;
-            margin: 0;
-            padding: 0;
-        }
-        header {
-            background-color: #54839D;
-            color: white;
-            padding: 20px;
-            text-align: center;
-            font-size: 24px;
-        }
-        .container {
-            width: 80%;
-            margin: 20px auto;
-            padding: 20px;
-            background-color: white;
-            border-radius: 8px;
-            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
-            text-align: center;
-        }
-        .kpi {
-            font-size: 36px;
-            color: #54839D;
-            font-weight: bold;
-        }
-        .form-group {
-            margin: 20px 0;
-        }
-        .select {
-            padding: 10px;
-            font-size: 16px;
-            border-radius: 5px;
-            border: 1px solid #ccc;
-        }
-        .button {
-            background-color: #54839D;
-            color: white;
-            padding: 10px 20px;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 16px;
-        }
-        .button:hover {
-            background-color: #3a5c70;
-        }
-    </style>
+    <title>Dashboard</title>
 </head>
 <body>
+    @extends('layouts.app')
 
-<header>
-    Dashboard de Ventas - KPI
-</header>
+    @section('content')
+    <div class="container">
+        <h1>Dashboard</h1>
 
-<div class="container">
-    <h2>Ventas Totales de la Empresa</h2>
-    <!-- Mostrar el total de ventas -->
-    <p class="kpi">${{ number_format($totalVentas, 2) }}</p>
+        <!-- Información de la Base de Datos -->
+        <h2>Base de Datos Seleccionada: {{ $db_conexion }}</h2>
+        <h3>Total de Ventas: <strong>${{ number_format($total_costos, 2) }}</strong></h3>
 
-    <!-- Formulario para seleccionar empresa -->
-    <form action="{{ url('/dashboard') }}" method="GET">
-        <div class="form-group">
-            <label for="company">Seleccionar Empresa:</label>
-            <select name="company" id="company" class="select">
-                <option value="empresa" {{ $company == 'empresa' ? 'selected' : '' }}>Empresa 1</option>
-                <option value="empresa_2" {{ $company == 'empresa_2' ? 'selected' : '' }}>Empresa 2</option>
-                <option value="empresa_3" {{ $company == 'empresa_3' ? 'selected' : '' }}>Empresa 3</option>
-                <option value="empresa_4" {{ $company == 'empresa_4' ? 'selected' : '' }}>Empresa 4</option>
+        <!-- Formulario para cambiar de base de datos -->
+        <h2>Seleccionar otra base de datos:</h2>
+        <form action="{{ route('dashboard.tablas') }}" method="POST">
+            @csrf
+            <label for="db_conexion">Base de Datos:</label>
+            <select name="db_conexion" id="db_conexion">
+                <option value="empresa" {{ $db_conexion == 'empresa' ? 'selected' : '' }}>Empresa</option>
+                <option value="empresa_2" {{ $db_conexion == 'empresa_2' ? 'selected' : '' }}>Empresa 2</option>
+                <option value="empresa_3" {{ $db_conexion == 'empresa_3' ? 'selected' : '' }}>Empresa 3</option>
+                <option value="empresa_4" {{ $db_conexion == 'empresa_4' ? 'selected' : '' }}>Empresa 4</option>
             </select>
-        </div>
-        <button type="submit" class="button">Actualizar KPI</button>
-    </form>
-</div>
+            <button type="submit">Ver Tablas</button>
+        </form>
+
+        <!-- Mostrar tablas si están disponibles -->
+        @if(isset($tablas) && count($tablas) > 0)
+            <h2>Tablas en la Base de Datos "{{ $db_conexion }}"</h2>
+            <ul>
+                @foreach ($tablas as $tabla)
+                    <li>{{ $tabla }}</li>
+                @endforeach
+            </ul>
+        @else
+            <p>No se encontraron tablas en la base de datos.</p>
+        @endif
+    </div>
+    @endsection
 
 </body>
 </html>
+
 

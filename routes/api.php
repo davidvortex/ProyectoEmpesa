@@ -3,8 +3,9 @@
 use App\Http\Controllers\DashboardController;
 use Illuminate\Support\Facades\Route;
 
-
+// Ruta para la vista principal del dashboard
 Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
-Route::get('/showEjercicio', [DashboardController::class, 'showEjercicio'])->name('dashboard.showEjercicio');
+
+// Permitir tanto GET como POST en la ruta para mostrar tablas
 Route::match(['get', 'post'], '/dashboard/tablas', [DashboardController::class, 'showTables'])->name('dashboard.tablas');
-Route::post('/dashboard/tablas', [DashboardController::class, 'showTables'])->name('dashboard.tablas');
+
