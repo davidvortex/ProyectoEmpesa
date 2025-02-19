@@ -1,0 +1,5 @@
+Aqui dejare mi Base de datos para hacer las conexiones correspondientes
+nombre de las bases de datos
+empresa, empresa_2, empresa_3, empresa_4
+
+asi para hacer la conexion
